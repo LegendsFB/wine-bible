@@ -8,6 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 
   <style>
     body { background:#000; color:#fff; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
@@ -22,6 +23,12 @@
   <div id="root"></div>
 
   <script>
+    // =========================
+// QR CONFIG
+// =========================
+const STAFF_URL = "https://legendsfb.github.io/wine-bible/";
+const ADMIN_URL = "https://legendsfb.github.io/wine-bible/?admin=1";
+const isAdmin = (new URLSearchParams(window.location.search).get("admin") === "1");
     // =========================
     // BTG LIST (TOP SECTION)
     // =========================
@@ -349,9 +356,36 @@
     // =========================
     // APP
     // =========================
+    async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    alert("Copied!");
+  } catch (e) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    alert("Copied!");
+  }
+}
     function App() {
       const [search, setSearch] = React.useState("");
       const [openName, setOpenName] = React.useState(null);
+      const [qrDataUrl, setQrDataUrl] = React.useState(null);
+      React.useEffect(() => {
+  if (!isAdmin) return;            // only generate QR on admin link
+  if (!window.QRCode) return;      // safety check
+
+  window.QRCode.toDataURL(
+    STAFF_URL,
+    { margin: 2, width: 280 },
+    (err, url) => {
+      if (!err) setQrDataUrl(url);
+    }
+  );
+}, []);
 
       const s = search.toLowerCase().trim();
 
@@ -429,6 +463,47 @@
           { className: "sticky top-0 bg-black pt-6 pb-4 z-10" },
 
           React.createElement("h1", { className: "text-3xl font-extrabold tracking-widest uppercase" }, "Wine Bible"),
+          // ADMIN QR PANEL (only shows on ?admin=1)
+isAdmin && React.createElement(
+  "div",
+  { className: "mt-4 card p-4 flex flex-col md:flex-row gap-4 items-center justify-between" },
+
+  React.createElement(
+    "div",
+    { className: "w-full" },
+    React.createElement("div", { className: "text-sm text-zinc-400 font-semibold" }, "Staff link (QR points here)"),
+    React.createElement("div", { className: "text-zinc-100 break-all text-sm mt-1" }, STAFF_URL),
+
+    React.createElement(
+      "div",
+      { className: "mt-3 flex gap-2 flex-wrap" },
+      React.createElement(
+        "button",
+        {
+          className: "px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm",
+          onClick: () => copyToClipboard(STAFF_URL)
+        },
+        "Copy staff link"
+      ),
+      React.createElement(
+        "button",
+        {
+          className: "px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm",
+          onClick: () => copyToClipboard(ADMIN_URL)
+        },
+        "Copy admin link"
+      )
+    )
+  ),
+
+  React.createElement(
+    "div",
+    { className: "shrink-0" },
+    qrDataUrl
+      ? React.createElement("img", { src: qrDataUrl, alt: "QR Code", className: "rounded-xl border border-zinc-700" })
+      : React.createElement("div", { className: "text-zinc-500 text-sm" }, "Generating QR...")
+  )
+),
 
           React.createElement("div", { className: "mt-4" },
             React.createElement("input", {
