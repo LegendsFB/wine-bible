@@ -21,6 +21,21 @@
 
 <body>
   <div id="root"></div>
+  <div id="adminQrWrap" style="display:none; max-width: 980px; margin: 0 auto; padding: 16px;">
+  <div style="background:#111; border:1px solid #333; border-radius:18px; padding:16px; color:#fff;">
+    <div style="font-size:14px; color:#aaa; margin-bottom:8px;">Staff link (QR points here)</div>
+    <div id="staffLinkText" style="font-size:16px; word-break:break-all; margin-bottom:12px;"></div>
+    <div style="display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap;">
+      <div style="background:#fff; padding:12px; border-radius:14px;">
+        <div id="staffQr"></div>
+      </div>
+      <div style="font-size:13px; color:#aaa; line-height:1.4; max-width: 420px;">
+        QR points to the staff link (no admin=1).<br/>
+        Tip: right-click the QR → Save image as…
+      </div>
+    </div>
+  </div>
+</div>
 
   <script>
     // =========================
@@ -537,5 +552,34 @@ isAdmin && React.createElement(
 
     ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
   </script>
+  <script>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const isAdmin = params.get("admin") === "1";
+    if (!isAdmin) return;
+
+    const wrap = document.getElementById("adminQrWrap");
+    const qrEl = document.getElementById("staffQr");
+    const staffLinkText = document.getElementById("staffLinkText");
+
+    if (!wrap || !qrEl || !staffLinkText) return;
+
+    const staffLink = window.location.origin + window.location.pathname; // no ?admin=1
+    staffLinkText.textContent = staffLink;
+    wrap.style.display = "block";
+
+    // Retry a bit in case the QR lib loads slowly on Pages
+    let attempts = 0;
+    const timer = setInterval(() => {
+      attempts++;
+      if (window.QRCode) {
+        qrEl.innerHTML = "";
+        new window.QRCode(qrEl, { text: staffLink, width: 220, height: 220 });
+        clearInterval(timer);
+      }
+      if (attempts >= 20) clearInterval(timer);
+    }, 250);
+  })();
+</script>
 </body>
 </html>
