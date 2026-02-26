@@ -1,24 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wine Bible</title>
 
-  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- React (CDN) -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
   <style>
-    body { background:#000; color:#fff; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
-    .card { background:#111; border:1px solid #222; border-radius:16px; }
-    .tag  { display:inline-block; font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#fbbf24; }
-    .btn  { background:#1f2937; border:1px solid #374151; padding:10px 14px; border-radius:999px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:12px; }
-    .btn:hover { border-color:#fbbf24; color:#fbbf24; }
-    input { background:#0b0b0b !important; border:1px solid #27272a !important; border-radius:14px !important; color:#fff !important; }
+    body { background-color: #000; color: #fff; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    .card { background: #111; border: 1px solid #222; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+    .tag { display: inline-block; font-size: 10px; letter-spacing: 0.12em; font-weight: 800; text-transform: uppercase; color: #fbbf24; }
+    input { background: #0f0f0f !important; color: #fff !important; border-radius: 16px !important; border: 1px solid #222 !important; }
+    input::placeholder { color: #9ca3af !important; }
   </style>
 </head>
 
@@ -27,333 +23,77 @@
 
   <script>
     // =========================
-    // 1) DATA (edit these notes)
+    // 1) MASTER WINE LIST (29)
     // =========================
     const WINES = [
-  // WHITES
-  {
-    category: "White",
-    name: "Esedra | Pinot Grigio",
-    region: "Friuli, Italy",
-    grapes: "Pinot Grigio",
-    taste: "Light body, high acid; lemon, pear, white flowers, saline-mineral finish.",
-    guest: "Crisp, clean, and super refreshing—like a squeeze of lemon over juicy pear.",
-    selling: "Friuli PG is the ‘serious’ Pinot Grigio: brighter, cleaner, more mineral than the basic stuff.",
-    service: "Serve well-chilled (6–8°C). White wine glass."
-  },
-  {
-    category: "White",
-    name: "Villa Maria | Sauvignon Blanc",
-    region: "Marlborough, New Zealand",
-    grapes: "Sauvignon Blanc",
-    taste: "High acid, light body; lime, grapefruit, passionfruit, fresh herbs.",
-    guest: "Zesty and aromatic—citrus + tropical fruit with a clean, fresh snap.",
-    selling: "Classic crowd-pleaser Sauvignon Blanc: huge aroma and it pops with food.",
-    service: "Serve well-chilled (6–8°C). White wine glass."
-  },
-  {
-    category: "White",
-    name: "3XP | Chardonnay",
-    region: "Niagara Peninsula, Canada",
-    grapes: "Chardonnay",
-    taste: "Medium body; apple, lemon curd, subtle oak/vanilla, gentle creaminess, balanced acid.",
-    guest: "Smooth but still fresh—ripe apple and lemon with a soft, creamy finish.",
-    selling: "Niagara Chardonnay with restraint: polished, food-friendly, not a butter bomb.",
-    service: "Serve cool (8–10°C). White wine glass."
-  },
-  {
-    category: "White",
-    name: "Leaning Post | Riesling",
-    region: "Niagara Peninsula, Canada",
-    grapes: "Riesling",
-    taste: "High acid; lime, green apple, peach; light body with a clean mineral edge (often dry to off-dry).",
-    guest: "Bright and lively—citrus and stone fruit with a super refreshing finish.",
-    selling: "Riesling is your secret weapon: it pairs with almost anything and stays crisp all night.",
-    service: "Serve chilled (7–9°C). White wine glass."
-  },
-  {
-    category: "White",
-    name: "Santa Margherita | Pinot Grigio",
-    region: "Alto Adige, Italy",
-    grapes: "Pinot Grigio",
-    taste: "Light body, crisp acid; green apple, lemon, white peach; clean, dry finish.",
-    guest: "Light, crisp, and easy—fresh apple and citrus, very clean.",
-    selling: "Iconic ‘safe luxury’ white: consistent, polished, and always goes down easy.",
-    service: "Serve well-chilled (6–8°C). White wine glass."
-  },
-  {
-    category: "White",
-    name: "Peller Estates | Pinot Gris",
-    region: "Niagara Peninsula, Canada",
-    grapes: "Pinot Gris",
-    taste: "Medium-light body; pear, melon, apple; softer acid than PG with a rounder texture.",
-    guest: "Softer and rounder than Pinot Grigio—ripe pear and melon, still refreshing.",
-    selling: "Great ‘middle lane’ white: more texture than Grigio, still bright and easy.",
-    service: "Serve chilled (7–9°C). White wine glass."
-  },
-  {
-    category: "White",
-    name: "Jean Marc Brocard | Chablis",
-    region: "Chablis, France",
-    grapes: "Chardonnay",
-    taste: "High acid, light-medium body; lemon, green apple, flinty mineral; very dry, no-oak feel.",
-    guest: "Crisp, dry Chardonnay—more citrus and minerality than butter.",
-    selling: "For people who say ‘I want Chardonnay but not oaky’—this is the answer.",
-    service: "Serve cool (8–10°C). White wine glass."
-  },
-  {
-    category: "White",
-    name: "Domaine Hubert Brochard | Sancerre",
-    region: "Sancerre, France",
-    grapes: "Sauvignon Blanc",
-    taste: "High acid; lemon, grapefruit, gooseberry; herbal + chalky mineral finish.",
-    guest: "Elegant Sauvignon Blanc—less tropical, more citrus and clean minerality.",
-    selling: "Sancerre is ‘grown-up’ Sauvignon Blanc: sharper, drier, more refined.",
-    service: "Serve chilled (7–9°C). White wine glass."
-  },
-  {
-    category: "White",
-    name: "Charles Baker, 'Picone Vineyard' | Riesling",
-    region: "Niagara Peninsula, Canada",
-    grapes: "Riesling",
-    taste: "High acid; lime zest, green apple, peach; focused, mineral, very food-friendly.",
-    guest: "Bright and precise—citrus and stone fruit with a clean, crisp finish.",
-    selling: "A step-up Riesling: more intensity and finesse—great for guests who like ‘crisp’ whites.",
-    service: "Serve chilled (7–9°C). White wine glass."
-  },
-  {
-    category: "White",
-    name: "Chateau de Maligny | Chablis 1er Cru",
-    region: "Chablis, France",
-    grapes: "Chardonnay",
-    taste: "High acid; citrus, green apple, oyster-shell minerality; more depth and length than basic Chablis.",
-    guest: "Crisp and elegant Chardonnay—extra depth, super mineral, very dry.",
-    selling: "Premier Cru = upgrade: same Chablis freshness, but richer texture and longer finish.",
-    service: "Serve cool (9–11°C). White wine glass."
-  },
+      // Whites (10)
+      { category:"White", name:"Esedra | Pinot Grigio", region:"Friuli, Italy", grapes:"Pinot Grigio", taste:"", guest:"", selling:"", service:"" },
+      { category:"White", name:"Villa Maria | Sauvignon Blanc", region:"Marlborough, New Zealand", grapes:"Sauvignon Blanc", taste:"", guest:"", selling:"", service:"" },
+      { category:"White", name:"3XP | Chardonnay", region:"Niagara Peninsula, Canada", grapes:"Chardonnay", taste:"", guest:"", selling:"", service:"" },
+      { category:"White", name:"Leaning Post | Riesling", region:"Niagara Peninsula, Canada", grapes:"Riesling", taste:"", guest:"", selling:"", service:"" },
+      { category:"White", name:"Santa Margherita | Pinot Grigio", region:"Alto Adige, Italy", grapes:"Pinot Grigio", taste:"", guest:"", selling:"", service:"" },
+      { category:"White", name:"Peller Estates | Pinot Gris", region:"Niagara Peninsula, Canada", grapes:"Pinot Gris", taste:"", guest:"", selling:"", service:"" },
+      { category:"White", name:"Jean Marc Brocard | Chablis", region:"Chablis, France", grapes:"Chardonnay", taste:"", guest:"", selling:"", service:"" },
+      { category:"White", name:"Domaine Hubert Brochard | Sancerre", region:"Sancerre, France", grapes:"Sauvignon Blanc", taste:"", guest:"", selling:"", service:"" },
+      { category:"White", name:"Charles Baker, 'Picone Vineyard' | Riesling", region:"Niagara Peninsula, Canada", grapes:"Riesling", taste:"", guest:"", selling:"", service:"" },
+      { category:"White", name:"Chateau de Maligny | Chablis 1er Cru", region:"Chablis, France", grapes:"Chardonnay", taste:"", guest:"", selling:"", service:"" },
 
-  // REDS
-  {
-    category: "Red",
-    name: "Leyda Reserve | Pinot Noir",
-    region: "Leyda Valley, Chile",
-    grapes: "Pinot Noir",
-    taste: "Light-medium body; red cherry, cranberry, subtle spice; fresh acid, soft tannin.",
-    guest: "Silky and easy—red berries and a little spice, not heavy.",
-    selling: "Great ‘starter Pinot’: smooth, food-friendly, and won’t overwhelm the table.",
-    service: "Serve slightly cool (14–16°C). Burgundy/large red glass."
-  },
-  {
-    category: "Red",
-    name: "Pago Aylés 'Unexpected' | Garnacha",
-    region: "Aragón, Spain",
-    grapes: "Garnacha",
-    taste: "Medium body; ripe strawberry/cherry, peppery spice; softer tannin, juicy finish.",
-    guest: "Juicy and smooth—ripe red fruit with a warm little spice note.",
-    selling: "Garnacha is the ‘fun red’: generous fruit, not too tannic, super crowd-friendly.",
-    service: "Serve 16–18°C. Large red glass."
-  },
-  {
-    category: "Red",
-    name: "Don David Reserve | Cabernet Sauvignon",
-    region: "Calchaqui Valley, Argentina",
-    grapes: "Cabernet Sauvignon",
-    taste: "Full body; blackcurrant, plum, cedar; firm tannin, structured finish.",
-    guest: "Bold and classic—dark fruit and a little oak, with a firm dry finish.",
-    selling: "Big Cab at a smart price: strong structure for steak orders without going ‘too fancy.’",
-    service: "Serve 17–18°C. Large red glass. Decant optional 15–30 min."
-  },
-  {
-    category: "Red",
-    name: "Frescobaldi | Chianti Classico",
-    region: "Tuscany, Italy",
-    grapes: "Sangiovese (blend)",
-    taste: "Medium body; sour cherry, dried herbs, leather; bright acid, grippy tannin.",
-    guest: "Classic Italian red—cherry and herbs, crisp and food-driven.",
-    selling: "Chianti is built for food: that bright acidity makes everything taste better.",
-    service: "Serve 16–18°C. Large red glass. Decant optional 15–30 min."
-  },
-  {
-    category: "Red",
-    name: "Thirty Bench | Red Blend",
-    region: "Niagara Peninsula, Canada",
-    grapes: "Red Blend",
-    taste: "Medium body; red/black berries, gentle spice; balanced tannin, smooth finish.",
-    guest: "Smooth and approachable—ripe berry fruit with a soft finish.",
-    selling: "Local Niagara red that drinks easy—great ‘house red upgrade’ for suites.",
-    service: "Serve 16–18°C. Large red glass."
-  },
-  {
-    category: "Red",
-    name: "Marques de Murrieta | Rioja Reserva",
-    region: "Rioja, Spain",
-    grapes: "Tempranillo (blend)",
-    taste: "Medium-full body; cherry, plum, vanilla, tobacco; smooth tannins, long finish.",
-    guest: "Rich but polished—dark cherry with a hint of vanilla and spice.",
-    selling: "Aged Rioja = instant ‘wow’ without being aggressive—smooth, classy, and long.",
-    service: "Serve 16–18°C. Large red glass. Decant 30 min recommended."
-  },
-  {
-    category: "Red",
-    name: "Fontanafredda | Barolo",
-    region: "Piedmont, Italy",
-    grapes: "Nebbiolo",
-    taste: "Full body; rose, cherry, tar, dried herbs; high tannin, high acid, very structured.",
-    guest: "Powerful and complex—cherry and floral notes with a firm, dry finish.",
-    selling: "Barolo is a ‘special occasion’ red: big structure, serious complexity—steakhouse energy.",
-    service: "Serve 18°C. Large red glass. Decant 60–90 min recommended."
-  },
-  {
-    category: "Red",
-    name: "Tomassi | Amarone della Valpolicella",
-    region: "Veneto, Italy",
-    grapes: "Corvina-led blend",
-    taste: "Full body; dried cherry/fig, cocoa, spice; high alcohol warmth, rich texture.",
-    guest: "Rich and plush—dark dried fruit and chocolatey depth.",
-    selling: "Amarone is the ‘luxury velvet red’: big, smooth, and instantly impressive.",
-    service: "Serve 18°C. Large red glass. Decant 45–90 min recommended."
-  },
-  {
-    category: "Red",
-    name: "Frescobaldi | Brunello",
-    region: "Tuscany, Italy",
-    grapes: "Sangiovese",
-    taste: "Full body; cherry, dried herbs, leather; high acid + tannin, long finish.",
-    guest: "Elegant but powerful—classic cherry and earthy notes with a structured finish.",
-    selling: "Brunello is premium Tuscany: depth, structure, and a long, serious finish.",
-    service: "Serve 18°C. Large red glass. Decant 60 min recommended."
-  },
-  {
-    category: "Red",
-    name: "Chateau la Croix | Bordeaux",
-    region: "Bordeaux, France",
-    grapes: "Bordeaux blend",
-    taste: "Medium-full body; blackcurrant, plum, cedar; firm tannins, classic structure.",
-    guest: "Classic, structured red—dark fruit and a dry, elegant finish.",
-    selling: "Bordeaux is the ‘boardroom red’: polished, structured, and made for steak.",
-    service: "Serve 17–18°C. Large red glass. Decant 30–60 min recommended."
-  },
-  {
-    category: "Red",
-    name: "Chante Perdrix | Chateauneuf-du-Pape",
-    region: "Rhone Valley, France",
-    grapes: "Southern Rhône blend",
-    taste: "Full body; ripe red/black fruit, garrigue herbs, pepper; warm, layered finish.",
-    guest: "Big, warm, and spicy—ripe fruit with an herby, peppery kick.",
-    selling: "CDP tastes expensive because it is: power + complexity + that signature Rhône spice.",
-    service: "Serve 18°C. Large red glass. Decant 45–60 min recommended."
-  },
-  {
-    category: "Red",
-    name: "Ca' del Monte | Amarone",
-    region: "Veneto, Italy",
-    grapes: "Corvina-led blend",
-    taste: "Full body; dried fruit, baking spice, cocoa; plush texture, warming finish.",
-    guest: "Rich and smooth—dark dried fruit and spice, very luxurious-feeling.",
-    selling: "Another Amarone option for guests who want bold + smooth without harsh tannin.",
-    service: "Serve 18°C. Large red glass. Decant 45–90 min recommended."
-  },
-  {
-    category: "Red",
-    name: "Jean Baptiste Boudier | Savigny les Beaune",
-    region: "Burgundy, France",
-    grapes: "Pinot Noir",
-    taste: "Light-medium body; cherry, raspberry, forest floor; silky tannin, bright acid.",
-    guest: "Elegant Pinot—red berries, soft texture, and a subtle earthy finish.",
-    selling: "Burgundy Pinot is the ‘fine dining’ Pinot: more nuance, more elegance, less sweetness.",
-    service: "Serve slightly cool (14–16°C). Burgundy glass. Decant optional 15–30 min."
-  },
-  {
-    category: "Red",
-    name: "Fuligni Brunello | Sangiovese",
-    region: "Montalcino, Italy",
-    grapes: "Sangiovese",
-    taste: "Full body; sour cherry, tobacco, dried herbs; high tannin/acid, very long finish.",
-    guest: "Serious, elegant red—cherry and earthy notes with a long structured finish.",
-    selling: "This is top-tier Brunello: refined, complex, and built for premium steak orders.",
-    service: "Serve 18°C. Large red glass. Decant 60–90 min recommended."
-  },
-  {
-    category: "Red",
-    name: "Antinori | Tignanello",
-    region: "Tuscany, Italy",
-    grapes: "Sangiovese + Cab (blend)",
-    taste: "Full body; dark cherry, blackberry, tobacco, cocoa; polished tannins, long finish.",
-    guest: "Luxurious and smooth—dark fruit and spice with a long, silky finish.",
-    selling: "‘Icon wine’ status: this is the flex bottle that still actually tastes amazing.",
-    service: "Serve 18°C. Large red glass. Decant 60–90 min recommended."
-  },
+      // Reds (15)
+      { category:"Red", name:"Leyda Reserve | Pinot Noir", region:"Leyda Valley, Chile", grapes:"Pinot Noir", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Pago Aylés 'Unexpected' | Garnacha", region:"Aragón, Spain", grapes:"Garnacha", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Don David Reserve | Cabernet Sauvignon", region:"Calchaqui Valley, Argentina", grapes:"Cabernet Sauvignon", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Frescobaldi | Chianti Classico", region:"Tuscany, Italy", grapes:"Sangiovese (blend)", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Thirty Bench | Red Blend", region:"Niagara Peninsula, Canada", grapes:"Red blend", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Marques de Murrieta | Rioja Reserva", region:"Rioja, Spain", grapes:"Tempranillo (blend)", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Fontanafredda | Barolo", region:"Piedmont, Italy", grapes:"Nebbiolo", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Tomassi | Amarone della Valpolicella", region:"Veneto, Italy", grapes:"Corvina-led blend", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Frescobaldi | Brunello", region:"Tuscany, Italy", grapes:"Sangiovese", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Chateau la Croix | Bordeaux", region:"Bordeaux, France", grapes:"Bordeaux blend", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Chante Perdrix | Chateauneuf-du-Pape", region:"Rhône Valley, France", grapes:"Southern Rhône blend", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Ca' del Monte | Amarone", region:"Veneto, Italy", grapes:"Corvina-led blend", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Jean Baptiste Boudier | Savigny-les-Beaune", region:"Burgundy, France", grapes:"Pinot Noir", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Fuligni | Brunello di Montalcino", region:"Montalcino, Italy", grapes:"Sangiovese", taste:"", guest:"", selling:"", service:"" },
+      { category:"Red", name:"Antinori | Tignanello", region:"Tuscany, Italy", grapes:"Sangiovese / Cab blend", taste:"", guest:"", selling:"", service:"" },
 
-  // SPARKLING & ROSÉ
-  {
-    category: "Sparkling & Rosé",
-    name: "Maison Nicolas Idiart | Cinsault",
-    region: "Languedoc, France",
-    grapes: "Cinsault",
-    taste: "Light body; strawberry, watermelon, gentle floral notes; crisp, dry finish.",
-    guest: "Fresh and easy—light red fruit, super refreshing, not sweet.",
-    selling: "Perfect ‘patio energy’ wine: looks fun, drinks clean, and pairs with almost anything.",
-    service: "Serve cold (6–8°C). Rosé/white wine glass."
-  },
-  {
-    category: "Sparkling & Rosé",
-    name: "Bottega Vino dei Poeti | Prosecco",
-    region: "Veneto, Italy",
-    grapes: "Glera",
-    taste: "Light body; green apple, pear, citrus; lively bubbles, dry finish.",
-    guest: "Crisp, bubbly, and refreshing—green apple and pear.",
-    selling: "The easiest celebration upgrade: bubbles make everything feel premium instantly.",
-    service: "Serve very cold (4–6°C). Flute or white wine glass."
-  },
-  {
-    category: "Sparkling & Rosé",
-    name: "Bottega Gold | Prosecco",
-    region: "Veneto, Italy",
-    grapes: "Glera",
-    taste: "Light body; pear, apple, citrus; clean and lively bubbles.",
-    guest: "Bright, clean Prosecco—fresh fruit and crisp bubbles.",
-    selling: "Same party, shinier bottle: guests love the gold bottle on the table.",
-    service: "Serve very cold (4–6°C). Flute or white wine glass."
-  },
-  {
-    category: "Sparkling & Rosé",
-    name: "Piper-Heidsieck | Champagne",
-    region: "Champagne, France",
-    grapes: "Champagne blend",
-    taste: "High acid; citrus, brioche, almond; fine persistent bubbles, long finish.",
-    guest: "Real Champagne—crisp citrus with that classic toasty, bready note.",
-    selling: "This is the ‘we’re doing it properly’ bottle—finer bubbles, more complexity, more prestige.",
-    service: "Serve very cold (4–6°C). Flute or white wine glass."
-  }
-];
+      // Sparkling & Rosé (4)
+      { category:"Sparkling & Rosé", name:"Maison Nicolas Idiart | Cinsault", region:"Languedoc, France", grapes:"Cinsault", taste:"", guest:"", selling:"", service:"" },
+      { category:"Sparkling & Rosé", name:"Bottega Vino dei Poeti | Prosecco", region:"Veneto, Italy", grapes:"Glera", taste:"", guest:"", selling:"", service:"" },
+      { category:"Sparkling & Rosé", name:"Bottega Gold | Prosecco", region:"Veneto, Italy", grapes:"Glera", taste:"", guest:"", selling:"", service:"" },
+      { category:"Sparkling & Rosé", name:"Piper-Heidsieck | Champagne", region:"Champagne, France", grapes:"Champagne blend", taste:"", guest:"", selling:"", service:"" }
+    ];
 
-    // De-dupe by name (your list had duplicates earlier)
-    const seen = new Set();
+    // =========================
+    // 2) BTG NAMES (TOP SECTION)
+    // =========================
+    const BTG_NAMES = [
+      "Esedra | Pinot Grigio",
+      "Villa Maria | Sauvignon Blanc",
+      "3XP | Chardonnay",
+      "Leyda Reserve | Pinot Noir",
+      "Pago Aylés 'Unexpected' | Garnacha",
+      "Don David Reserve | Cabernet Sauvignon",
+      "Bottega Vino dei Poeti | Prosecco"
+    ];
+
+    // =====================================
+    // 3) DEDUPE (just in case future copy/paste)
+    // =====================================
     const uniq = [];
+    const seen = new Set();
     for (const w of WINES) {
       if (!seen.has(w.name)) { uniq.push(w); seen.add(w.name); }
     }
 
     // =========================
-    // 2) QR + Admin gating
-    // =========================
-    const params = new URLSearchParams(window.location.search);
-    const isAdmin = params.get("admin") === "1";
-
-    // Always generate QR to the *normal staff link* (no admin param)
-    const staffUrl = window.location.origin + window.location.pathname.replace(/\/?$/, "/");
-    const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=420x420&data=" + encodeURIComponent(staffUrl);
-
-    // =========================
-    // 3) APP
+    // 4) APP
     // =========================
     function App() {
       const [search, setSearch] = React.useState("");
       const [openName, setOpenName] = React.useState(null);
-      const [showQR, setShowQR] = React.useState(false);
+
+      const s = search.toLowerCase().trim();
 
       const filtered = uniq.filter(w => {
-        const s = search.toLowerCase().trim();
         if (!s) return true;
         return (
           (w.name || "").toLowerCase().includes(s) ||
@@ -363,142 +103,96 @@
         );
       });
 
+      const btgFiltered = filtered.filter(w => BTG_NAMES.includes(w.name));
+      const restFiltered = filtered.filter(w => !BTG_NAMES.includes(w.name));
+
+      function renderWineCard(w) {
+        const isOpen = openName === w.name;
+
+        return React.createElement(
+          "div",
+          { key: w.name, className: "card p-5" },
+
+          React.createElement(
+            "button",
+            {
+              className: "w-full flex items-center justify-between text-left",
+              onClick: () => setOpenName(isOpen ? null : w.name)
+            },
+
+            React.createElement(
+              "div",
+              null,
+              React.createElement("div", { className: "tag" }, w.category),
+              React.createElement("div", { className: "text-lg md:text-xl font-semibold mt-1" }, w.name),
+              React.createElement("div", { className: "text-sm text-zinc-400 mt-1" }, `${w.region} • ${w.grapes}`)
+            ),
+
+            React.createElement("div", { className: "text-2xl text-zinc-500 leading-none pl-4" }, isOpen ? "–" : "+")
+          ),
+
+          isOpen && React.createElement(
+            "div",
+            { className: "mt-5 pt-5 border-t border-zinc-800 space-y-4 text-sm" },
+
+            React.createElement("div", null,
+              React.createElement("div", { className: "text-zinc-400 font-semibold mb-1" }, "Taste"),
+              React.createElement("div", { className: "text-zinc-100" }, w.taste || "—")
+            ),
+
+            React.createElement("div", null,
+              React.createElement("div", { className: "text-zinc-400 font-semibold mb-1" }, "Guest-friendly description"),
+              React.createElement("div", { className: "text-zinc-100" }, w.guest || "—")
+            ),
+
+            React.createElement("div", null,
+              React.createElement("div", { className: "text-zinc-400 font-semibold mb-1" }, "Selling line"),
+              React.createElement("div", { className: "text-zinc-100" }, w.selling || "—")
+            ),
+
+            React.createElement("div", null,
+              React.createElement("div", { className: "text-zinc-400 font-semibold mb-1" }, "Service note"),
+              React.createElement("div", { className: "text-zinc-100" }, w.service || "—")
+            )
+          )
+        );
+      }
+
       return React.createElement(
         "div",
         { className: "max-w-3xl mx-auto p-4 pb-24" },
 
-        // Header
         React.createElement(
           "div",
           { className: "sticky top-0 bg-black pt-6 pb-4 z-10" },
-          React.createElement(
-            "div",
-            { className: "flex items-center justify-between gap-3" },
-            React.createElement("h1", { className: "text-2xl font-extrabold tracking-widest uppercase" }, "Wine Bible"),
 
-            // ADMIN ONLY: QR button
-            isAdmin
-              ? React.createElement(
-                  "button",
-                  { className: "btn", onClick: () => setShowQR(true) },
-                  "Show Staff QR"
-                )
-              : React.createElement("div", null)
-          ),
+          React.createElement("h1", { className: "text-3xl font-extrabold tracking-widest uppercase" }, "Wine Bible"),
 
           React.createElement("div", { className: "mt-4" },
             React.createElement("input", {
               type: "text",
-              value: search,
               placeholder: `Search all ${uniq.length} wines...`,
               className: "w-full p-4 text-lg outline-none",
+              value: search,
               onChange: (e) => { setSearch(e.target.value); setOpenName(null); }
             })
           )
         ),
 
-        // List
-        React.createElement(
-          "div",
-          { className: "mt-4 space-y-3" },
-          filtered.map(w => {
-            const isOpen = openName === w.name;
+        React.createElement("div", { className: "mt-6 space-y-6" },
 
-            return React.createElement(
-              "div",
-              { key: w.name, className: "card p-4" },
+          React.createElement("div", null,
+            React.createElement("h2", { className: "text-xl font-bold tracking-widest uppercase text-amber-400 mb-3" }, "By The Glass"),
+            btgFiltered.length
+              ? React.createElement("div", { className: "space-y-4" }, btgFiltered.map(renderWineCard))
+              : React.createElement("div", { className: "text-zinc-500 text-sm" }, "No BTG matches your search.")
+          ),
 
-              React.createElement(
-                "button",
-                {
-                  className: "w-full flex items-center justify-between text-left",
-                  onClick: () => setOpenName(isOpen ? null : w.name)
-                },
-
-                React.createElement(
-                  "div",
-                  null,
-                  React.createElement("div", { className: "tag" }, w.category),
-                  React.createElement("div", { className: "text-lg font-semibold mt-1" }, w.name),
-                  React.createElement("div", { className: "text-sm text-zinc-400 mt-1" }, `${w.region} • ${w.grapes}`)
-                ),
-
-                React.createElement("div", { className: "text-2xl text-zinc-500 leading-none" }, isOpen ? "–" : "+")
-              ),
-
-              isOpen && React.createElement(
-                "div",
-                { className: "mt-4 pt-4 border-t border-zinc-800 space-y-4 text-sm" },
-
-                // Taste
-                React.createElement("div", null,
-                  React.createElement("div", { className: "text-zinc-400 font-semibold mb-1" }, "Taste"),
-                  React.createElement("div", { className: "text-zinc-100" }, w.taste || "—")
-                ),
-
-                // Guest-friendly
-                React.createElement("div", null,
-                  React.createElement("div", { className: "text-zinc-400 font-semibold mb-1" }, "Guest-friendly description"),
-                  React.createElement("div", { className: "text-zinc-100" }, w.guest || "—")
-                ),
-
-                // Selling line
-                React.createElement("div", null,
-                  React.createElement("div", { className: "text-zinc-400 font-semibold mb-1" }, "Selling line"),
-                  React.createElement("div", { className: "text-zinc-100" }, w.selling || "—")
-                ),
-
-                // Service
-                React.createElement("div", null,
-                  React.createElement("div", { className: "text-zinc-400 font-semibold mb-1" }, "Service note"),
-                  React.createElement("div", { className: "text-zinc-100" }, w.service || "—")
-                )
-              )
-            );
-          })
-        ),
-
-        // QR Modal (admin only)
-        (isAdmin && showQR) && React.createElement(
-          "div",
-          { className: "fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-6" },
-          React.createElement(
-            "div",
-            { className: "bg-zinc-900 w-full max-w-sm p-6 rounded-[2rem] border border-zinc-800 text-center relative" },
-
-            React.createElement(
-              "button",
-              { className: "absolute top-4 right-4 text-zinc-400 text-xl", onClick: () => setShowQR(false) },
-              "×"
-            ),
-
-            React.createElement(
-              "div",
-              { className: "bg-white p-4 rounded-3xl inline-block shadow-2xl mb-5" },
-              React.createElement("img", { src: qrUrl, className: "w-56 h-56", alt: "Staff Access QR" })
-            ),
-
-            React.createElement("div", { className: "text-lg font-extrabold tracking-widest uppercase" }, "Staff Access"),
-            React.createElement("div", { className: "text-xs text-zinc-400 mt-2" }, "Scan to open the Wine Bible."),
-
-            React.createElement("div", { className: "mt-5 flex gap-3 justify-center flex-wrap" },
-              React.createElement("a", {
-                className: "btn",
-                href: qrUrl,
-                target: "_blank",
-                rel: "noreferrer"
-              }, "Open QR Image"),
-
-              React.createElement("a", {
-                className: "btn",
-                href: qrUrl,
-                download: "wine-bible-qr.png"
-              }, "Download QR")
-            ),
-
-            React.createElement("div", { className: "text-[11px] text-zinc-500 mt-4" },
-              "If Download doesn’t work in your browser: click “Open QR Image”, then right-click the QR and choose “Save image as…”"
-            )
+          React.createElement("div", null,
+            React.createElement("h2", { className: "text-xl font-bold tracking-widest uppercase text-zinc-400 mb-3 mt-8" }, "Full List"),
+            restFiltered.length
+              ? React.createElement("div", { className: "space-y-4" }, restFiltered.map(renderWineCard))
+              : React.createElement("div", { className: "text-zinc-500 text-sm" }, "No matches.")
           )
         )
       );
